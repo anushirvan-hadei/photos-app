@@ -13,7 +13,6 @@ const port = 3050;
 type Product = { name: string, price: number, type: string }
 
 app.get('/photos', async (req, res) => {
-    // console.log("HEADERS:", req.headers.authorization.replace("Bearer ", ""));
     const rawResponse = await fetch(`https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/images/v1`, {
         method: "GET",
         headers: {
@@ -29,7 +28,6 @@ app.get('/photos', async (req, res) => {
 });
 
 app.get('/photo/:id', async (req, res) => {
-    // console.log("HEADERS:", req.headers.authorization.replace("Bearer ", ""));
     const rawResponse = await fetch(`https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/images/v1/${req.params.id}`, {
         headers: {
             Authorization: `Bearer ${API_KEY}`
@@ -44,9 +42,7 @@ app.get('/photo/:id', async (req, res) => {
 });
 
 app.post('/photo', async (req, res) => {
-    // console.log("HEADERS:", req.headers.authorization.replace("Bearer ", ""));
-    const rawResponse = await fetch("https://mocki.io/v1/8d3123e9-2401-4070-9fd5-93eecb0b16f6");
-    const allProducts: Product[] = await rawResponse.json();
+    // TODO
     res.send([]);
 });
 
@@ -87,6 +83,3 @@ app.delete('/photo/:id', async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
-
-
-//https://run.mocky.io/v3/214025eb-1ae9-4fb0-b9eb-0fbfe6d0f56e
