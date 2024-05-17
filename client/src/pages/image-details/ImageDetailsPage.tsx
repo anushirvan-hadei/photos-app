@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import './ImageDetailsPage.css'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Photo } from "../../models/Photo.ts";
 import { PhotoResponse } from "../../models/PhotoResponse.ts";
 import { Button, Form } from "react-bootstrap";
@@ -11,6 +11,7 @@ import { API_URL } from "../../utils/constants.ts";
 
 function ImageDetailsPage() {
 
+    const navigate = useNavigate()
     const params = useParams();
     const [photo, setPhoto] = useState<Photo | undefined>(undefined);
 
@@ -25,12 +26,16 @@ function ImageDetailsPage() {
 
         const rawResponse = await fetch(`${API_URL}/photo/${params.id}`, {
             method: "PUT",
-            body: JSON.stringify({ title, description })
+            body: JSON.stringify({
+                title: title || photo?.title,
+                description: description || photo?.description,
+            })
         });
 
         const response: PhotoResponse = await rawResponse.json();
         if (response.success) {
             setPhoto(response.photo)
+            navigate('/')
         }
     }
 
@@ -44,6 +49,7 @@ function ImageDetailsPage() {
 
         const response: PhotoResponse = await rawResponse.json();
         if (response.success) {
+            navigate('/')
         }
     }
 
@@ -53,6 +59,9 @@ function ImageDetailsPage() {
             const response: PhotoResponse = await rawResponse.json();
             if (response.success) {
                 setPhoto(response.photo)
+
+                setTitle(response.photo.title)
+                setDescription(response.photo.description)
             }
         }
 
@@ -63,24 +72,26 @@ function ImageDetailsPage() {
         <Container>
             <div className="d-flex">
                 <div className="me-5">
-                    {photo ? (<img src={photo.url} alt={photo.title}/>) : "Image not found"}
+                    {photo ? (<img className="w-100 rounded-3" src={photo.url} alt={photo.title}/>) : "Image not found"}
                 </div>
-                <div>
+                <div className="w-50">
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Update Title</Form.Label>
                             <Form.Control placeholder="Title" value={title} onChange={handleTitle}/>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <Form.Label>Update Description</Form.Label>
-                            <Form.Control placeholder="Description" value={description} onChange={handleDescription}/>
+                            <Form.Control as="textarea"
+                                          rows={5}
+                                          placeholder="Description"
+                                          value={description}
+                                          onChange={handleDescription}/>
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" onClick={updatePhoto}>Update</Button>
+                        <Button className="w-100" variant="primary" type="submit" onClick={updatePhoto}>Update</Button>
                     </Form>
 
-                    <Button className="mt-3" variant="danger" type="submit" onClick={deletePhoto}>Delete</Button>
+                    <Button className="w-100 mt-3" variant="danger" type="submit" onClick={deletePhoto}>Delete</Button>
                 </div>
             </div>
 

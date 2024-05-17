@@ -5,10 +5,13 @@ export const Image = (props: { photo: Photo }) => {
 
     return (
         <a href={photoPath}>
-            <div className="flex-column">
-                <img className="w-100 mb-4" style={{backgroundSize: "cover" }} src={props.photo.url} alt={props.photo.title}/>
-                <strong>{props.photo.title}</strong>
-                <strong>{props.photo.description}</strong>
+            <div className="d-flex flex-column mb-4 rounded-3 bg-white">
+                <img className="w-100 mb-2 rounded-top-3" style={{backgroundSize: "cover" }} src={props.photo.url} alt={props.photo.title}/>
+
+                <div className="d-flex flex-column p-2">
+                    <strong>{props.photo.title}</strong>
+                    <span className="small">{props.photo.description}</span>
+                </div>
             </div>
 
         </a>
